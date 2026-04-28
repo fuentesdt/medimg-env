@@ -205,63 +205,8 @@ RUN userdel -r ubuntu 2>/dev/null || true && \
 #       - Shell exfiltration tools
 #     MCP: disabled entirely
 # ------------------------------------------------------------
-RUN mkdir -p /home/developer/.claude && \
-    cat > /home/developer/.claude/settings.json << 'EOF'
-{
-  "permissions": {
-    "allow": [
-      "Read(/workspace/**)",
-      "Write(/workspace/**)",
-      "Read(/outputs/**)",
-      "Write(/outputs/**)"
-    ],
-    "deny": [
-      "Read(/data/**)",
-      "Read(/phi/**)",
-      "Read(/patients/**)",
-      "Read(/dicom/**)",
-      "Read(/nifti/**)",
-      "Read(/imaging/**)",
-      "Read(/clinical/**)",
-      "Read(/ehr/**)",
-      "Read(/mri/**)",
-      "Read(/ct/**)",
-      "Read(/scans/**)",
-      "Read(/studies/**)",
-      "Read(/archive/**)",
-      "Read(/root/**)",
-      "Read(/home/**)",
-      "Read(../**)",
-      "Read(/etc/passwd)",
-      "Read(/etc/shadow)",
-      "Read(/etc/hosts)",
-      "Read(**/.env)",
-      "Read(**/.env.*)",
-      "Read(**/*.pem)",
-      "Read(**/*.key)",
-      "Read(**/*.p12)",
-      "Read(**/*.pfx)",
-      "Read(**/id_rsa)",
-      "Read(**/id_ed25519)",
-      "Read(**/credentials)",
-      "Read(**/*secret*)",
-      "Read(**/*password*)",
-      "Bash(curl:*)",
-      "Bash(wget:*)",
-      "Bash(scp:*)",
-      "Bash(rsync:*)",
-      "Bash(nc:*)",
-      "Bash(ncat:*)",
-      "Bash(netcat:*)",
-      "Bash(ssh:*)",
-      "Bash(ftp:*)",
-      "Bash(sftp:*)"
-    ]
-  },
-  "enabledMcpjsonFiles": false,
-  "disableNonEssentialTraffic": true
-}
-EOF
+RUN mkdir -p /home/developer/.claude
+COPY claude-settings.json /home/developer/.claude/settings.json
 
 # Protect the settings file — developer can read but not overwrite
 RUN chown root:developer /home/developer/.claude/settings.json && \
@@ -279,19 +224,7 @@ RUN touch /var/log/claude-audit.log && \
 # ------------------------------------------------------------
 # 14. Login banner reminding developers of PHI policy
 # ------------------------------------------------------------
-RUN cat > /etc/motd << 'EOF'
-
-  ╔══════════════════════════════════════════════════════════╗
-  ║           PHI-FREE DEVELOPMENT ENVIRONMENT               ║
-  ╠══════════════════════════════════════════════════════════╣
-  ║  • This container is for SOFTWARE DEVELOPMENT ONLY       ║
-  ║  • DO NOT mount, copy, or paste any PHI into this env    ║
-  ║  • DO NOT reference patient files, IDs, or scan data     ║
-  ║  • Use de-identified or synthetic data ONLY              ║
-  ║  • All Claude Code sessions are logged                   ║
-  ╚══════════════════════════════════════════════════════════╝
-
-EOF
+COPY motd /etc/motd
 
 # ------------------------------------------------------------
 # 15. Switch to non-root user for all runtime activity

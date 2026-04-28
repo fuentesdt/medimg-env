@@ -1,0 +1,11 @@
+
+  ╔══════════════════════════════════════════════════════════╗
+  ║           PHI-FREE DEVELOPMENT ENVIRONMENT               ║
+  ╠══════════════════════════════════════════════════════════╣
+  ║  • This container is for SOFTWARE DEVELOPMENT ONLY       ║
+  ║  • DO NOT mount, copy, or paste any PHI into this env    ║
+  ║  • DO NOT reference patient files, IDs, or scan data     ║
+  ║  • Use de-identified or synthetic data ONLY              ║
+  ║  • All Claude Code sessions are logged                   ║
+  ╚══════════════════════════════════════════════════════════╝
+
