@@ -114,9 +114,7 @@ RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
 # ------------------------------------------------------------
 # Python setup
 # ------------------------------------------------------------
-RUN ln -sf /usr/bin/python3 /usr/bin/python && \
-    pip3 install --no-cache-dir --upgrade pip setuptools wheel \
-    --break-system-packages
+RUN ln -sf /usr/bin/python3 /usr/bin/python
 
 # ------------------------------------------------------------
 # 2. Scientific Python core
@@ -139,7 +137,7 @@ RUN pip install --no-cache-dir --break-system-packages \
 RUN pip install --no-cache-dir --break-system-packages \
     opencv-python-headless Pillow \
     connected-components-3d edt fill-voids kimimaro \
-    pyradiomics morphsnakes pymeshlab
+    morphsnakes pymeshlab
 
 # ------------------------------------------------------------
 # 5. Deep learning — PyTorch CPU (swap for CUDA below)
@@ -188,7 +186,8 @@ RUN npm install -g @anthropic-ai/claude-code && \
 #     entire filesystem. A non-root user limits blast radius to
 #     only what 'developer' can read/write.
 # ------------------------------------------------------------
-RUN useradd -m -u 1000 -s /bin/bash developer && \
+RUN userdel -r ubuntu 2>/dev/null || true && \
+    useradd -m -u 1000 -s /bin/bash developer && \
     mkdir -p /workspace /outputs && \
     chown -R developer:developer /workspace /outputs /home/developer
 
