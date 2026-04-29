@@ -100,7 +100,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libdcmtk-dev libinsighttoolkit5-dev libhdf5-dev libgdal-dev \
     zlib1g-dev liblzma-dev libbz2-dev \
     htop tree vim \
-    auditd \
+    auditd iputils-ping \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # ------------------------------------------------------------
