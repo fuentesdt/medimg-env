@@ -310,8 +310,6 @@ BASHRC_BLOCK='
 source /opt/medimg-env/venv/bin/activate
 export CLAUDE_CODE_ROOTDIR=/workspace
 export DISABLE_AUTOUPDATER=1
-# Set your Anthropic API key (do not commit this file):
-# export ANTHROPIC_API_KEY="sk-ant-..."
 '
 if ! grep -q '# --- medimg-env ---' /home/developer/.bashrc 2>/dev/null; then
   printf '%s\n' "$BASHRC_BLOCK" >> /home/developer/.bashrc
@@ -379,8 +377,6 @@ WorkingDirectory=/workspace
 Environment="PATH=/opt/medimg-env/venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 Environment="CLAUDE_CODE_ROOTDIR=/workspace"
 Environment="DISABLE_AUTOUPDATER=1"
-# Set ANTHROPIC_API_KEY via: sudo systemctl edit jupyterlab.service
-# Then add: Environment="ANTHROPIC_API_KEY=sk-ant-..."
 ExecStart=/opt/medimg-env/venv/bin/jupyter lab \
     --ip=127.0.0.1 \
     --port=8888 \
@@ -430,11 +426,11 @@ echo "====================================================="
 echo "  NEXT STEPS"
 echo "====================================================="
 echo ""
-echo "1. Set ANTHROPIC_API_KEY for the developer user:"
-echo "   sudo -u developer bash -c 'echo export ANTHROPIC_API_KEY=sk-ant-... >> ~/.bashrc'"
-echo "   OR for the systemd service (recommended):"
-echo "   sudo systemctl edit jupyterlab.service"
-echo "   (add the line: Environment=\"ANTHROPIC_API_KEY=sk-ant-...\")"
+echo "1. Authenticate Claude Code (run once on this machine as the developer user):"
+echo "   sudo -u developer claude login"
+echo "   Follow the browser prompt to authorize with your claude.ai account."
+echo "   This stores an OAuth token in /home/developer/.claude/ and uses your"
+echo "   Claude Max subscription — no per-token API charges."
 echo ""
 echo "2. Start JupyterLab:"
 echo "   sudo systemctl start jupyterlab"

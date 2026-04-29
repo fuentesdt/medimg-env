@@ -214,12 +214,23 @@ The Dockerfile cannot enforce network restrictions — that must be done at the 
 docker build -t medimg-phi-safe .
 ```
 
+### Prerequisite: Authenticate on the host first
+
+Claude Code authenticates via your **Claude Max subscription** using an OAuth token stored in `~/.claude/` on your host machine. Run this once on the host (outside Docker) before using the container:
+
+```bash
+claude login
+# Follow the browser prompt to authorize with your claude.ai account
+```
+
+This creates `~/.claude/` with a credential tied to your Claude Max plan. The container mounts this directory read-only so Claude Code inside the container uses your existing subscription — no separate API key, no per-token charges.
+
 ### Run (safe mount pattern)
 
 ```bash
 docker run -it --rm \
   --network phi-safe-net \
-  -e ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY \
+  -v ~/.claude:/home/developer/.claude:ro \
   -v /path/to/your/source_code:/workspace:rw \
   -v /path/to/your/outputs:/outputs:rw \
   medimg-phi-safe bash
@@ -227,22 +238,12 @@ docker run -it --rm \
 
 > Only mount source code and outputs. **Never** mount a directory containing patient data, imaging archives, or clinical records.
 
-### Authenticate Claude Code (first run)
-
-```bash
-# Inside the container — API key method (CI/headless)
-# ANTHROPIC_API_KEY is already set via -e flag above
-
-# OR mount your existing OAuth token from the host:
-# docker run ... -v ~/.claude:/home/developer/.claude:ro ...
-```
-
 ### Start JupyterLab
 
 ```bash
 docker run -it --rm \
   --network phi-safe-net \
-  -e ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY \
+  -v ~/.claude:/home/developer/.claude:ro \
   -v /path/to/source_code:/workspace:rw \
   -p 8888:8888 \
   medimg-phi-safe

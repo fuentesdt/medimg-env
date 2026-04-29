@@ -84,7 +84,6 @@ FROM ubuntu:24.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=America/Chicago
-ENV ANTHROPIC_API_KEY=""
 # Disable auto-updater — avoids container OOM bug on startup
 ENV DISABLE_AUTOUPDATER=1
 # Restrict Claude Code filesystem root to /workspace only
