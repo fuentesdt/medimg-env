@@ -65,12 +65,18 @@
 # ══════════════════════════════════════════════════════════════
 # SAFE `docker run` COMMAND:
 #
+# Prerequisite — authenticate once on the host (outside Docker):
+#   claude login   # stores OAuth token in ~/.claude/
+#
 #   docker run -it --rm \
 #     --network phi-safe-net \
-#     -e ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY \
+#     -v ~/.claude:/home/developer/.claude:ro \
 #     -v /path/to/SOURCE_CODE:/workspace:rw \
 #     -v /path/to/OUTPUTS:/outputs:rw \
 #     medimg-phi-safe bash
+#
+# Authentication uses your Claude Max subscription via the mounted
+# OAuth token — no API key, no per-token charges.
 #
 # Create the restricted network once on the host:
 #   docker network create --driver bridge phi-safe-net
